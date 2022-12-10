@@ -4,6 +4,8 @@ CFLAGS= -Wall -Wextra -Werror
 RM=rm -f
 SRCS= ./philosophers.c \
 ./ft_atoi.c \
+./init.c \
+./small_ft.c \
 
 
 OBJS=${SRCS:.c=.o}

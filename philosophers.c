@@ -1,19 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Philosophers.c                                     :+:      :+:    :+:   */
+/*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgales <bgales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 17:29:02 by bgales            #+#    #+#             */
-/*   Updated: 2022/12/08 18:02:50 by bgales           ###   ########.fr       */
+/*   Updated: 2022/12/10 11:17:08 by bgales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "philosophers.h"
-
-
 
 int	parsing(int argc, char **argv)
 {
@@ -42,19 +40,24 @@ int	parsing(int argc, char **argv)
 	return (0);
 }
 
-
-void *philo(t_lst args)
+void	*philo(t_info args, int i)
 {
-	printf("---%d\n", args.fork);
-	return 0;
+	args.start = ft_start_time();
+	pthread_mutex_lock(&args.philo[i].fork_l);
+	printf("%ld %d has taken a fork\n", ft_time(args.start), args.philo[i].nbr);
+	pthread_mutex_lock(args.philo[i].fork_r);
+	printf("%ld %d has taken a fork\n", ft_time(args.start), args.philo->nbr);
+	pthread_mutex_unlock(&args.philo[i].fork_l);
+	pthread_mutex_unlock(args.philo[i].fork_r);
+	return (0);
 }
 
 int	main(int argc, char **argv)
 {
-	t_lst args;
+	t_info	args;
 	//struct timeval time;
 	if (parsing(argc, argv) == 1)
-		return(1);
+		return (1);
 	args_init(&args, argv);
 	thread_init(args);
 	// gettimeofday(&time, NULL);
