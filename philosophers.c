@@ -6,7 +6,7 @@
 /*   By: bgales <bgales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 17:29:02 by bgales            #+#    #+#             */
-/*   Updated: 2022/12/10 11:17:08 by bgales           ###   ########.fr       */
+/*   Updated: 2022/12/12 16:38:58 by bgales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,32 @@ int	parsing(int argc, char **argv)
 	return (0);
 }
 
-void	*philo(t_info args, int i)
+void	meal_time(t_philo *philo)
 {
-	args.start = ft_start_time();
-	pthread_mutex_lock(&args.philo[i].fork_l);
-	printf("%ld %d has taken a fork\n", ft_time(args.start), args.philo[i].nbr);
-	pthread_mutex_lock(args.philo[i].fork_r);
-	printf("%ld %d has taken a fork\n", ft_time(args.start), args.philo->nbr);
-	pthread_mutex_unlock(&args.philo[i].fork_l);
-	pthread_mutex_unlock(args.philo[i].fork_r);
+	ft_print(philo, 'E');
+	usleep(*philo->args->t_to_eat);
+	ft_print(philo, 'S');
+	usleep(*philo->args->t_to_sleep);
+	ft_print(philo, 'T');
+}
+void	take_fork(t_philo *philo, int i)
+{
+
+	pthread_mutex_lock(&philo->args->fork_r[i]);
+	ft_print(philo, 'F');
+	pthread_mutex_lock(&philo->args->fork_l[i + 1]);
+	ft_print(philo, 'F');
+	meal_time(philo);
+	pthread_mutex_unlock(&philo->args->fork_r[i]);
+	pthread_mutex_unlock(&philo->args->fork_l[i + 1]);
+}
+
+
+void	*philo(void *philo)
+{
+	t_philo *a;
+	a = philo;
+	take_fork(a, a->nbr - 1);
 	return (0);
 }
 

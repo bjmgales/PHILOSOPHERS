@@ -6,7 +6,7 @@
 /*   By: bgales <bgales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 17:46:07 by bgales            #+#    #+#             */
-/*   Updated: 2022/12/10 11:57:25 by bgales           ###   ########.fr       */
+/*   Updated: 2022/12/12 16:10:03 by bgales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,31 +23,39 @@
 # include <sys/syscall.h>
 # include <sys/types.h>
 
+struct s_lst;
+
 typedef struct s_philo
 {
 	pthread_t		th;
+	struct s_lst	*args;
 	int				nbr;
-	int				*fork_r;
-	int				fork_l;
+	long			last_eat;
 }		t_philo;
 
 typedef struct s_lst
 {
-	long			start;
-	int				*fork;
-	unsigned int	t_to_die;
-	unsigned int	t_to_eat;
-	unsigned int	t_to_sleep;
-	unsigned int	nb_of_eat;
+	long			*start;
+	int				*fork_nbr;
+	unsigned int	*t_to_die;
+	unsigned int	*t_to_eat;
+	unsigned int	*t_to_sleep;
+	unsigned int	*nb_of_eat;
+	pthread_mutex_t	*fork_r;
+	pthread_mutex_t	*fork_l;
+	pthread_mutex_t print;
 	t_philo			*philo;
 }		t_info;
 
 int		ft_atoi(const char *str);
+void 	ft_print_info(t_info *args);
+void 	*test(void *args);
 void	args_init(t_info *args, char **argv);
 void	*thread_init(t_info args);
-void	*philo(t_info args, int i);
+void	*philo(void *args);
 long	ft_time(long start);
 long	ft_start_time();
+void 	ft_print(t_philo *philo, int status);
 
 
 #endif
