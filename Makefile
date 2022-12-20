@@ -1,6 +1,6 @@
 NAME= philosophers
 CC= gcc
-CFLAGS= -Wall -Wextra -Werror
+CFLAGS= -Wall -Wextra -Werror -g -fsanitize=address
 RM=rm -f
 SRCS= ./philosophers.c \
 ./ft_atoi.c \

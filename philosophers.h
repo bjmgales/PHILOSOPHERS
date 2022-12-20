@@ -6,7 +6,7 @@
 /*   By: bgales <bgales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 17:46:07 by bgales            #+#    #+#             */
-/*   Updated: 2022/12/12 16:10:03 by bgales           ###   ########.fr       */
+/*   Updated: 2022/12/17 12:34:06 by bgales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,11 @@ typedef struct s_lst
 	unsigned int	*t_to_eat;
 	unsigned int	*t_to_sleep;
 	unsigned int	*nb_of_eat;
-	pthread_mutex_t	*fork_r;
+	unsigned int	*meal_count;
+	int				*dead;
+	pthread_mutex_t	**fork_r;
 	pthread_mutex_t	*fork_l;
-	pthread_mutex_t print;
+	pthread_mutex_t *print;
 	t_philo			*philo;
 }		t_info;
 
@@ -56,6 +58,7 @@ void	*philo(void *args);
 long	ft_time(long start);
 long	ft_start_time();
 void 	ft_print(t_philo *philo, int status);
+int 	check_state(void *philo);
 
 
 #endif
