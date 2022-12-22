@@ -6,7 +6,7 @@
 /*   By: bgales <bgales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 17:46:07 by bgales            #+#    #+#             */
-/*   Updated: 2022/12/17 12:34:06 by bgales           ###   ########.fr       */
+/*   Updated: 2022/12/22 13:16:29 by bgales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@
 # include <sys/syscall.h>
 # include <sys/types.h>
 
-struct s_lst;
-
+struct	s_lst;
 typedef struct s_philo
 {
 	pthread_t		th;
@@ -37,28 +36,27 @@ typedef struct s_lst
 {
 	long			*start;
 	int				*fork_nbr;
+	int				*nb_of_eat;
+	int				*meal_count;
 	unsigned int	*t_to_die;
 	unsigned int	*t_to_eat;
 	unsigned int	*t_to_sleep;
-	unsigned int	*nb_of_eat;
-	unsigned int	*meal_count;
 	int				*dead;
 	pthread_mutex_t	**fork_r;
 	pthread_mutex_t	*fork_l;
-	pthread_mutex_t *print;
+	pthread_mutex_t	*print;
 	t_philo			*philo;
 }		t_info;
 
 int		ft_atoi(const char *str);
-void 	ft_print_info(t_info *args);
-void 	*test(void *args);
+void	ft_print_info(t_info *args);
+void	*test(void *args);
 void	args_init(t_info *args, char **argv);
 void	*thread_init(t_info args);
 void	*philo(void *args);
 long	ft_time(long start);
-long	ft_start_time();
-void 	ft_print(t_philo *philo, int status);
-int 	check_state(void *philo);
-
+long	ft_start_time(void);
+void	ft_print(t_philo *philo, int status);
+void	*is_dead(void *args);
 
 #endif

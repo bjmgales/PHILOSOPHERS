@@ -6,7 +6,7 @@
 /*   By: bgales <bgales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 12:27:40 by bgales            #+#    #+#             */
-/*   Updated: 2022/12/17 12:59:56 by bgales           ###   ########.fr       */
+/*   Updated: 2022/12/22 13:46:49 by bgales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,17 @@ void ft_print_info(t_info *args)
 
 void ft_print(t_philo *philo, int status)
 {
-
-	if(pthread_mutex_lock(philo->args->print) != 0)
-	{
-		printf("Mutex lock error\n");
-		return;
-	}
-	if (!check_state(philo))
+	// if(!*philo->args->dead)
+	// {
+	// 	check_state(philo);
+	// 	if(pthread_mutex_lock(philo->args->print) != 0)
+	// 	{
+	// 		printf("Mutex lock error\n");
+	// 		return;
+	// 	}
+	// }
+	pthread_mutex_lock(philo->args->print);
+	if (!*philo->args->dead)
 	{
 		if (status == 'S')
 			printf("%ld %d is sleeping\n", ft_time(*philo->args->start), philo->nbr);
@@ -63,29 +67,30 @@ void ft_print(t_philo *philo, int status)
 		if (status == 'E')
 			printf("%ld %d is eating\n", ft_time(*philo->args->start), philo->nbr);
 	}
-	if (status == 'D')
-		printf("%ld %d died\n", ft_time(*philo->args->start), philo->nbr);
-
 	pthread_mutex_unlock(philo->args->print);
 	return;
 }
 
-int check_state(void *philo)
+void *is_dead(void *args)
 {
-	t_philo *a;
-	int i;
+	t_info	*a;
+	int		i;
 
+	a = args;
 	i = -1;
-	a = philo;
-
-	while (++i < *a->args->fork_nbr)
+	while (++i < *a->fork_nbr)
 	{
-		if (ft_time(a->last_eat) > *a->args->t_to_die || *a->args->meal_count > *a->args->nb_of_eat)
+		if (ft_time(a->philo[i].last_eat) > *a->t_to_die)
 		{
-		printf("%ld %d died\n", ft_time(*a->args->start), a->nbr);
-			pthread_mutex_unlock(a->args->print);
-			*a->args->dead = 1;
-			return 1;
+			pthread_mutex_lock(a->print);
+			printf("%d philo last eat :%ld\n", a->philo[i].nbr, ft_time(a->philo[i].last_eat));
+			printf("t_to_die :%u\n", *a->t_to_die);
+			printf("lol\n");
+			printf("%ld %d died\n", ft_time(*a->start), a->philo[i].nbr);
+			i = -1;
+			while (++i < *a->fork_nbr)
+				pthread_detach(a->philo[i].th);
+			return (0);
 		}
 	}
 	return 0;
