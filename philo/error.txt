@@ -1,0 +1,123 @@
+==================
+WARNING: ThreadSanitizer: data race (pid=10243)
+  Write of size 4 at 0x7ffee5375460 by thread T1 (mutexes: write M13, write M14, write M23):
+    #0 meal_time routine.c:19 (philosophers:x86_64+0x100001436)
+    #1 take_fork routine.c:58 (philosophers:x86_64+0x1000019a6)
+    #2 routine routine.c:71 (philosophers:x86_64+0x100001aa9)
+
+  Previous read of size 4 at 0x7ffee5375460 by thread T2:
+    #0 is_dead death_check.c:29 (philosophers:x86_64+0x100002be4)
+
+  As if synchronized via sleep:
+    #0 usleep <null>:1063664 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x2953e)
+    #1 routine routine.c:69 (philosophers:x86_64+0x100001a98)
+
+  Location is stack of main thread.
+
+  Mutex M13 (0x7b4000000000) created at:
+    #0 pthread_mutex_init <null>:1063424 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x2b973)
+    #1 mutex_init init.c:27 (philosophers:x86_64+0x10000101f)
+    #2 main main.c:21 (philosophers:x86_64+0x100000c4e)
+
+  Mutex M14 (0x7b4000000040) created at:
+    #0 pthread_mutex_init <null>:1063424 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x2b973)
+    #1 mutex_init init.c:27 (philosophers:x86_64+0x10000101f)
+    #2 main main.c:21 (philosophers:x86_64+0x100000c4e)
+
+  Mutex M23 (0x7ffee53754b8) created at:
+    #0 pthread_mutex_lock <null>:1063424 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x39f5e)
+    #1 meal_time routine.c:18 (philosophers:x86_64+0x100001400)
+    #2 take_fork routine.c:58 (philosophers:x86_64+0x1000019a6)
+    #3 routine routine.c:71 (philosophers:x86_64+0x100001aa9)
+
+  Thread T1 (tid=40751, running) created by main thread at:
+    #0 pthread_create <null>:1063616 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x2a99d)
+    #1 start_routine routine.c:86 (philosophers:x86_64+0x100001c28)
+    #2 main main.c:22 (philosophers:x86_64+0x100000c68)
+
+  Thread T2 (tid=40752, running) created by main thread at:
+    #0 pthread_create <null>:1063616 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x2a99d)
+    #1 start_routine routine.c:91 (philosophers:x86_64+0x100001c9a)
+    #2 main main.c:22 (philosophers:x86_64+0x100000c68)
+
+SUMMARY: ThreadSanitizer: data race routine.c:19 in meal_time
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=10243)
+  Write of size 8 at 0x7b2800000018 by thread T1 (mutexes: write M13, write M14):
+    #0 meal_time routine.c:28 (philosophers:x86_64+0x100001567)
+    #1 take_fork routine.c:58 (philosophers:x86_64+0x1000019a6)
+    #2 routine routine.c:71 (philosophers:x86_64+0x100001aa9)
+
+  Previous read of size 8 at 0x7b2800000018 by thread T2:
+    [failed to restore the stack]
+
+  As if synchronized via sleep:
+    #0 usleep <null>:1063664 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x2953e)
+    #1 routine routine.c:69 (philosophers:x86_64+0x100001a98)
+
+  Location is heap block of size 160 at 0x7b2800000000 allocated by main thread:
+    #0 malloc <null>:1063568 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x4e62a)
+    #1 malloc_data init.c:17 (philosophers:x86_64+0x100000f07)
+    #2 main main.c:20 (philosophers:x86_64+0x100000c42)
+
+  Mutex M13 (0x7b4000000000) created at:
+    #0 pthread_mutex_init <null>:1063424 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x2b973)
+    #1 mutex_init init.c:27 (philosophers:x86_64+0x10000101f)
+    #2 main main.c:21 (philosophers:x86_64+0x100000c4e)
+
+  Mutex M14 (0x7b4000000040) created at:
+    #0 pthread_mutex_init <null>:1063424 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x2b973)
+    #1 mutex_init init.c:27 (philosophers:x86_64+0x10000101f)
+    #2 main main.c:21 (philosophers:x86_64+0x100000c4e)
+
+  Thread T1 (tid=40751, running) created by main thread at:
+    #0 pthread_create <null>:1063616 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x2a99d)
+    #1 start_routine routine.c:86 (philosophers:x86_64+0x100001c28)
+    #2 main main.c:22 (philosophers:x86_64+0x100000c68)
+
+  Thread T2 (tid=40752, running) created by main thread at:
+    #0 pthread_create <null>:1063616 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x2a99d)
+    #1 start_routine routine.c:91 (philosophers:x86_64+0x100001c9a)
+    #2 main main.c:22 (philosophers:x86_64+0x100000c68)
+
+SUMMARY: ThreadSanitizer: data race routine.c:28 in meal_time
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=10243)
+  Read of size 8 at 0x7b2800000040 by thread T4:
+    #0 is_dead death_check.c:24 (philosophers:x86_64+0x100002af2)
+
+  Previous write of size 8 at 0x7b2800000040 by thread T3 (mutexes: write M14, write M15):
+    #0 meal_time routine.c:28 (philosophers:x86_64+0x100001567)
+    #1 take_fork routine.c:58 (philosophers:x86_64+0x1000019a6)
+    #2 routine routine.c:71 (philosophers:x86_64+0x100001aa9)
+
+  Location is heap block of size 160 at 0x7b2800000000 allocated by main thread:
+    #0 malloc <null>:2673696 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x4e62a)
+    #1 malloc_data init.c:17 (philosophers:x86_64+0x100000f07)
+    #2 main main.c:20 (philosophers:x86_64+0x100000c42)
+
+  Mutex M14 (0x7b4000000040) created at:
+    #0 pthread_mutex_init <null>:2673552 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x2b973)
+    #1 mutex_init init.c:27 (philosophers:x86_64+0x10000101f)
+    #2 main main.c:21 (philosophers:x86_64+0x100000c4e)
+
+  Mutex M15 (0x7b4000000080) created at:
+    #0 pthread_mutex_init <null>:2673552 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x2b973)
+    #1 mutex_init init.c:27 (philosophers:x86_64+0x10000101f)
+    #2 main main.c:21 (philosophers:x86_64+0x100000c4e)
+
+  Thread T4 (tid=40755, running) created by main thread at:
+    #0 pthread_create <null>:2673744 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x2a99d)
+    #1 start_routine routine.c:91 (philosophers:x86_64+0x100001c9a)
+    #2 main main.c:22 (philosophers:x86_64+0x100000c68)
+
+  Thread T3 (tid=40753, running) created by main thread at:
+    #0 pthread_create <null>:2673744 (libclang_rt.tsan_osx_dynamic.dylib:x86_64h+0x2a99d)
+    #1 start_routine routine.c:86 (philosophers:x86_64+0x100001c28)
+    #2 main main.c:22 (philosophers:x86_64+0x100000c68)
+
+SUMMARY: ThreadSanitizer: data race death_check.c:24 in is_dead
+==================
+ThreadSanitizer: reported 3 warnings
