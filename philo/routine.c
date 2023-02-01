@@ -6,19 +6,18 @@
 /*   By: bgales <bgales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 16:16:56 by bgales            #+#    #+#             */
-/*   Updated: 2023/01/28 17:03:46 by bgales           ###   ########.fr       */
+/*   Updated: 2023/02/01 13:39:36 by bgales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-
 void	meal_time(t_philo *philo)
 {
-	long time;
+	long	time;
+
 	pthread_mutex_lock(&philo->data_lock);
 	philo->last_eat = timestamp(philo->data->start);
-	philo->nb_of_eat++;
 	philo->has_eaten = 1;
 	pthread_mutex_unlock(&philo->data_lock);
 	ft_print(philo, 'E');
@@ -30,41 +29,60 @@ void	meal_time(t_philo *philo)
 	pthread_mutex_unlock(&philo->hyper_lock);
 	ft_print(philo, 'S');
 	time = ft_time();
-	// pthread_mutex_lock(&philo->hyper_lock);
 	while (time_diff(time) < philo->data->t_to_sleep)
 		usleep(100);
 	ft_print(philo, 'T');
-	return;
+	return ;
 }
 
 void	take_fork(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->fork[philo->nbr - 1]);
-	 pthread_mutex_lock(&philo->hyper_lock);
+	ft_print(philo, 'F');
+	pthread_mutex_lock(&philo->hyper_lock);
 	if (philo->nbr == philo->data->fork_nbr)
 	{
 		pthread_mutex_lock(&philo->data->fork[0]);
 		ft_print(philo, 'F');
-		// pthread_mutex_lock(&philo->hyper_lock);
 	}
 	else
 	{
 		pthread_mutex_lock(&philo->data->fork[philo->nbr]);
 		ft_print(philo, 'F');
 	}
-		pthread_mutex_unlock(&philo->hyper_lock);
+	pthread_mutex_unlock(&philo->hyper_lock);
 	meal_time(philo);
-	return;
+	return ;
 }
+
 void	*routine(void *philo)
 {
-	 t_philo	*ph;
+	t_philo	*ph;
 
-	 ph = philo;
-	if (ph->nbr % 2)
-		 usleep(200);
+	ph = philo;
+	if (ph->nbr % 2 != 0)
+		usleep(20000);
 	while (1)
 		take_fork(ph);
+	return (0);
+}
+
+void	*thread_launch(t_info data)
+{
+	int	i;
+
+	i = -1;
+	while (++i < data.fork_nbr)
+	{
+		data.philo[i].last_eat = timestamp(data.start);
+		if (pthread_create(&data.philo[i].th, NULL,
+				routine, (void *)&data.philo[i]) != 0)
+		{
+			printf("Error in thread#%d creation\n", i);
+			return ((void *)(1));
+		}
+		usleep(10);
+	}
 	return (0);
 }
 
@@ -77,30 +95,12 @@ void	*start_routine(t_info data)
 	i = -1;
 	data.start = ft_time();
 	philo_init(&data);
-	while(++i < data.fork_nbr)
-	{
-		data.philo[i].last_eat = timestamp(data.start);
-		if (pthread_create(&data.philo[i].th, NULL, routine, (void *)&data.philo[i]) != 0)
-		{
-			printf("Error in thread#%d creation\n", i);
-			return (void *)(1);
-		}
-		usleep(10);
-	}
-	i = -1;
+	thread_launch(data);
 	if (pthread_create(&death_th, NULL, is_dead_two, (void *)&data) != 0)
-	{
-		printf("Error in death_check thread creation\n");
-		return (void *)(1);
-	}
-	if (data.must_eat)
-	{
+		return ((void *)(1));
+	if (data.must_eat != -1)
 		if (pthread_create(&meal_th, NULL, meal_number, (void *)&data) != 0)
-		{
 			printf("Error in death_check thread creation\n");
-			return (void *)(1);
-		}
-	}
 	pthread_mutex_lock(&data.dead);
 	pthread_mutex_lock(&data.dead);
 	while (++i < data.fork_nbr)

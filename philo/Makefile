@@ -8,6 +8,7 @@ SRCS= ./main.c \
 ./routine.c \
 ./side_ft.c \
 ./death_check.c \
+./norm.c \
 
 
 OBJS=${SRCS:.c=.o}

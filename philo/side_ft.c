@@ -6,86 +6,53 @@
 /*   By: bgales <bgales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 23:27:38 by bgales            #+#    #+#             */
-/*   Updated: 2023/01/28 15:49:41 by bgales           ###   ########.fr       */
+/*   Updated: 2023/02/01 13:36:08 by bgales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./philosophers.h"
 
-long time_diff(long start)
+long	time_diff(long start)
 {
-	long current_time;
+	long	current_time;
 
 	current_time = ft_time();
 	return (current_time - start);
 }
+
 long	ft_time(void)
 {
 	struct timeval	start;
 
 	gettimeofday(&start, NULL);
 	return (start.tv_sec * 1000 + start.tv_usec / 1000);
-
 }
+
 long	timestamp(long start_time)
 {
-	struct timeval end;
+	struct timeval	end;
 
 	gettimeofday(&end, NULL);
 	return ((end.tv_sec * 1000 + end.tv_usec / 1000) - start_time);
 }
-void ft_print(t_philo *philo, int status)
+
+void	ft_print(t_philo *philo, int status)
 {
 	pthread_mutex_lock(&philo->data->print_lock);
-		// if (status == 'E')
-		// {
-		// 	printf(GREEN"%ld %d is eating \t \t  LAST EAT : %ld ms\n", timestamp(philo->data->start), philo->nbr, (timestamp(philo->data->start) - philo->last_eat));
-		// 	pthread_mutex_unlock(&philo->data->print_lock);
-		// 	return;
-		// }
-		// if (status == 'F')
-		// {
-		// 	printf(BLUE"%ld %d has taken a fork \t \t  LAST EAT : %ld ms\n",timestamp(philo->data->start), philo->nbr, (timestamp(philo->data->start) - philo->last_eat));
-		// 	pthread_mutex_unlock(&philo->data->print_lock);
-		// 	return;
-		// }
-		// if (status == 'S')
-		// {
-		// 	printf(YELLOW"%ld %d is sleeping \t \t  LAST EAT : %ld ms\n", timestamp(philo->data->start), philo->nbr, (timestamp(philo->data->start) - philo->last_eat));
-		// 	pthread_mutex_unlock(&philo->data->print_lock);
-		// 	return;
-		// }
-		// if (status == 'T')
-		// {
-		// 	printf(MAGENTA"%ld %d is thinking \t \t  LAST EAT : %ld ms\n", timestamp(philo->data->start), philo->nbr, (timestamp(philo->data->start) - philo->last_eat));
-		// 	pthread_mutex_unlock(&philo->data->print_lock);
-		// 	return;
-		// }
 	if (status == 'E')
-	{
-		printf(GREEN"%ld %d is eating\n", timestamp(philo->data->start), philo->nbr);
-		pthread_mutex_unlock(&philo->data->print_lock);
-		return;
-	}
+		printf(GREEN"%ld %d is eating\n",
+			timestamp(philo->data->start), philo->nbr);
 	if (status == 'F')
-	{
-		printf(BLUE"%ld %d has taken a fork\n",timestamp(philo->data->start), philo->nbr);
-		pthread_mutex_unlock(&philo->data->print_lock);
-		return;
-	}
+		printf(BLUE"%ld %d has taken a fork\n",
+			timestamp(philo->data->start), philo->nbr);
 	if (status == 'S')
-	{
-		printf(YELLOW"%ld %d is sleeping\n", timestamp(philo->data->start), philo->nbr);
-		pthread_mutex_unlock(&philo->data->print_lock);
-		return;
-	}
+		printf(YELLOW"%ld %d is sleeping\n",
+			timestamp(philo->data->start), philo->nbr);
 	if (status == 'T')
-	{
-		printf(MAGENTA"%ld %d is thinking\n", timestamp(philo->data->start), philo->nbr);
-		pthread_mutex_unlock(&philo->data->print_lock);
-		return;
-	}
-	return;
+		printf(MAGENTA"%ld %d is thinking\n",
+			timestamp(philo->data->start), philo->nbr);
+	pthread_mutex_unlock(&philo->data->print_lock);
+	return ;
 }
 
 int	ft_atoi(const char *str)

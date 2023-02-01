@@ -6,7 +6,7 @@
 /*   By: bgales <bgales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 14:36:40 by bgales            #+#    #+#             */
-/*   Updated: 2023/01/28 14:29:57 by bgales           ###   ########.fr       */
+/*   Updated: 2023/01/29 16:45:40 by bgales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ void	mutex_init(t_info *data)
 	pthread_mutex_init(&data->dead, NULL);
 	pthread_mutex_init(&data->print_lock, NULL);
 	pthread_mutex_init(&data->bool_lock, NULL);
-	return;
+	return ;
 }
+
 void	philo_init(t_info *data)
 {
 	int	i;
@@ -44,8 +45,9 @@ void	philo_init(t_info *data)
 		data->philo[i].nbr = i + 1;
 		data->philo[i].data = data;
 	}
-	return;
+	return ;
 }
+
 t_info	args_init(char **argv)
 {
 	t_info	ret;
