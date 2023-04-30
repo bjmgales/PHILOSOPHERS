@@ -6,18 +6,28 @@
 /*   By: bgales <bgales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 23:27:38 by bgales            #+#    #+#             */
-/*   Updated: 2023/02/01 13:36:08 by bgales           ###   ########.fr       */
+/*   Updated: 2023/02/10 15:06:14 by bgales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./philosophers.h"
 
-long	time_diff(long start)
+int	custom_sleeper(int time_ms)
 {
-	long	current_time;
+	struct timeval	temp;
+	long int		start_time;
 
-	current_time = ft_time();
-	return (current_time - start);
+	gettimeofday(&temp, NULL);
+	start_time = ((long int)temp.tv_usec / 1000)
+		+ ((long int)temp.tv_sec * 1000);
+	usleep((float)time_ms * 950);
+	while (((long int)temp.tv_usec / 1000)
+		+ ((long int)temp.tv_sec * 1000) - start_time < (time_ms))
+	{
+		usleep(100);
+		gettimeofday(&temp, NULL);
+	}
+	return (0);
 }
 
 long	ft_time(void)
@@ -34,25 +44,6 @@ long	timestamp(long start_time)
 
 	gettimeofday(&end, NULL);
 	return ((end.tv_sec * 1000 + end.tv_usec / 1000) - start_time);
-}
-
-void	ft_print(t_philo *philo, int status)
-{
-	pthread_mutex_lock(&philo->data->print_lock);
-	if (status == 'E')
-		printf(GREEN"%ld %d is eating\n",
-			timestamp(philo->data->start), philo->nbr);
-	if (status == 'F')
-		printf(BLUE"%ld %d has taken a fork\n",
-			timestamp(philo->data->start), philo->nbr);
-	if (status == 'S')
-		printf(YELLOW"%ld %d is sleeping\n",
-			timestamp(philo->data->start), philo->nbr);
-	if (status == 'T')
-		printf(MAGENTA"%ld %d is thinking\n",
-			timestamp(philo->data->start), philo->nbr);
-	pthread_mutex_unlock(&philo->data->print_lock);
-	return ;
 }
 
 int	ft_atoi(const char *str)
