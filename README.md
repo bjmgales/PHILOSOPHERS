@@ -49,14 +49,13 @@ Deepthought’s grading, the evaluation will stop.
 ## Global rules
 <details>
 <summary>see more</summary>
+
 You have to write a program for the mandatory part and another one for the bonus part
 (if you decide to do the bonus part). They both have to comply with the following rules:
+
 * Global variables are forbidden!  
 Your(s) program(s) should take the following arguments: 
-* number_of_philosophers 
-* me_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]
-* number_of_philosophers: The number of philosophers and also the number
-of forks.
+* number_of_philosophers   
 * time_to_die (in milliseconds): If a philosopher didn’t start eating time_to_die
 milliseconds since the beginning of their last meal or the beginning of the simulation, they die.
 * time_to_eat (in milliseconds): The time it takes for a philosopher to eat.
@@ -83,3 +82,16 @@ and X with the philosopher number.
 after the actual death of the philosopher.
 * Again, philosophers should avoid dying!
 </details>
+
+## Mandatory part
+<details>
+<summary>see more</summary>
+
+The specific rules for the mandatory part are:
+* Each philosopher should be a thread.
+* There is one fork between each pair of philosophers. Therefore, if there are several
+philosophers, each philosopher has a fork on their left side and a fork on their right
+side. If there is only one philosopher, there should be only one fork on the table.
+* To prevent philosophers from duplicating forks, you should protect the forks state
+with a mutex for each of them.
+
